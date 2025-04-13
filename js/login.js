@@ -28,9 +28,9 @@ function login() {
       const payload = JSON.parse(atob(idToken.split('.')[1]));
       const groups = payload["cognito:groups"] || [];
 
-      if (groups.includes("owners")) {
+      if (groups.includes("owner")) {
         window.location.href = "owner.html";
-      } else if (groups.includes("drivers")) {
+      } else if (groups.includes("driver")) {
         window.location.href = "driver.html";
       } else {
         document.getElementById("message").innerText = "You are not assigned to any group.";
