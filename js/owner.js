@@ -6,7 +6,7 @@ if (!idToken) {
 const payload = JSON.parse(atob(idToken.split('.')[1]));
 const groups = payload["cognito:groups"] || [];
 
-if (!groups.includes("owners")) {
+if (!groups.includes("owner")) {
   alert("Access denied. Not an owner.");
   window.location.href = "login.html";
 }
