@@ -13,6 +13,7 @@ function logout() {
   window.location.href = "login.html";
 }
 
+
 async function uploadExcel() {
   const fileInput = document.getElementById("excelFile");
   const file = fileInput.files[0];
@@ -21,6 +22,7 @@ async function uploadExcel() {
     return;
   }
 
+  // Step 1: Ask backend for presigned URL
   const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod", {
     method: "POST",
     headers: {
@@ -32,15 +34,21 @@ async function uploadExcel() {
 
   const data = await res.json();
   const presignedUrl = data.url;
+  const objectKey = data.filename;
 
+  // Step 2: Upload to S3 using the presigned URL
   const uploadRes = await fetch(presignedUrl, {
     method: "PUT",
+    headers: {
+      "Content-Type": "application/octet-stream"
+    },
     body: file
   });
 
-  document.getElementById("uploadStatus").innerText =
-    uploadRes.ok ? "✅ File uploaded to S3." : "❌ Upload failed.";
+  document.getElementById("uploadStatus").innerText = 
+    uploadRes.ok ? `✅ Uploaded to S3 as ${objectKey}` : "❌ Upload failed.";
 }
+
 
 async function fetchAllJobs() {
   const res = await fetch("https://38suwmuf43.execute-api.ap-southeast-2.amazonaws.com/prod", {
