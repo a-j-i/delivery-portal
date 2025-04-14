@@ -7,8 +7,29 @@
 </head>
 <body>
   <h2>Welcome Owner</h2>
-  <p>You can upload job Excel files and manage all jobs here.</p>
+
+  <!-- Excel Upload -->
+  <h3>Upload Job Excel</h3>
+  <input type="file" id="excelFile" accept=".xlsx,.xls">
+  <button onclick="uploadExcel()">Upload Excel</button>
+  <p id="uploadStatus"></p>
+  
+  <!-- Unassigned Jobs -->
+  <h3>Unassigned Jobs</h3>
+  <button onclick="getUnassignedJobs()">Get Unassigned Jobs</button>
+  <div id="unassignedJobs"></div>
+  
+  <!-- Incomplete Jobs -->
+  <h3>Incomplete Jobs</h3>
+  <button onclick="getIncompleteJobs()">Get Incomplete Jobs</button>
+  <div id="incompleteJobs"></div>
+  
+  <!-- Today’s Jobs -->
+  <h3>Today’s Jobs</h3>
+  <div id="todaysJobs"></div>
+  
   <button onclick="logout()">Logout</button>
+
   <script src="js/owner.js"></script>
 </body>
 </html>
