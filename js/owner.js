@@ -54,8 +54,21 @@ async function fetchAllJobs() {
   const res = await fetch("https://38suwmuf43.execute-api.ap-southeast-2.amazonaws.com/prod", {
     headers: { Authorization: idToken }
   });
-  return await res.json();
+
+  const raw = await res.json();
+
+  // 👇 Fix: parse the stringified array from `body`
+  const jobs = JSON.parse(raw.body);
+
+  // Optional safety check
+  if (!Array.isArray(jobs)) {
+    console.error("Expected array but got:", jobs);
+    return [];
+  }
+
+  return jobs;
 }
+
 
 async function getUnassignedJobs() {
   const jobs = await fetchAllJobs();
