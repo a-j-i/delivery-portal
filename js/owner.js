@@ -11,10 +11,10 @@ async function uploadExcel() {
 
   try {
     // Get presigned URL from API
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod", {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/upload", {
       method: "POST",
       headers: {
-        Authorization: idToken,
+        //Authorization: idToken,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ filename: file.name })
