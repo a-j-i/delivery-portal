@@ -14,7 +14,7 @@ async function uploadExcel() {
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod", {
       method: "POST",
       headers: {
-        //Authorization: idToken,
+        Authorization: idToken,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({ filename: file.name })
