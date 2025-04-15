@@ -13,7 +13,6 @@ function logout() {
   window.location.href = "login.html";
 }
 
-
 async function uploadExcel() {
   const fileInput = document.getElementById("excelFile");
   const file = fileInput.files[0];
@@ -22,53 +21,62 @@ async function uploadExcel() {
     return;
   }
 
-  // Step 1: Ask backend for presigned URL
-  const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod", {
-    method: "POST",
-    headers: {
-      Authorization: idToken,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ filename: file.name })
-  });
+  try {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod", {
+      method: "POST",
+      headers: {
+        Authorization: idToken,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ filename: file.name })
+    });
 
-  const data = await res.json();
-  const presignedUrl = data.url;
-  const objectKey = data.filename;
+    if (!res.ok) {
+      throw new Error(`Presigned URL fetch failed: ${res.status}`);
+    }
 
-  // Step 2: Upload to S3 using the presigned URL
-  const uploadRes = await fetch(presignedUrl, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/octet-stream"
-    },
-    body: file
-  });
+    const data = await res.json();
+    const presignedUrl = data.url;
+    const objectKey = data.filename;
 
-  document.getElementById("uploadStatus").innerText = 
-    uploadRes.ok ? `✅ Uploaded to S3 as ${objectKey}` : "❌ Upload failed.";
+    const uploadRes = await fetch(presignedUrl, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/octet-stream"
+      },
+      body: file
+    });
+
+    document.getElementById("uploadStatus").innerText =
+      uploadRes.ok ? `✅ Uploaded to S3 as ${objectKey}` : "❌ Upload failed.";
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById("uploadStatus").innerText = "❌ Upload error. Check console.";
+  }
 }
-
 
 async function fetchAllJobs() {
-  const res = await fetch("https://38suwmuf43.execute-api.ap-southeast-2.amazonaws.com/prod", {
-    headers: { Authorization: idToken }
-  });
+  try {
+    const res = await fetch("https://38suwmuf43.execute-api.ap-southeast-2.amazonaws.com/prod", {
+      headers: { Authorization: idToken }
+    });
 
-  const raw = await res.json();
+    if (!res.ok) {
+      throw new Error(`GET jobs failed: ${res.status}`);
+    }
 
-  // 👇 Fix: parse the stringified array from `body`
-  const jobs = JSON.parse(raw.body);
+    const raw = await res.json();
+    const jobs = JSON.parse(raw.body); // Lambda proxy response
 
-  // Optional safety check
-  if (!Array.isArray(jobs)) {
-    console.error("Expected array but got:", jobs);
+    if (!Array.isArray(jobs)) throw new Error("Jobs is not an array");
+    return jobs;
+
+  } catch (err) {
+    console.error("Failed to fetch jobs:", err);
     return [];
   }
-
-  return jobs;
 }
-
 
 async function getUnassignedJobs() {
   const jobs = await fetchAllJobs();
@@ -96,7 +104,7 @@ async function getIncompleteJobs() {
   `).join('') || "<p>No incomplete jobs found.</p>";
 }
 
-// Optional: show today’s jobs automatically
+// Auto-show today's jobs
 (async function showTodaysJobs() {
   const jobs = await fetchAllJobs();
   const today = new Date().toISOString().split('T')[0];
