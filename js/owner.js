@@ -108,7 +108,7 @@ async function assignJob(jobId) {
   const driverId = select.value;
 
   try {
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/assign-job", {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/assign-job", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ job_id: jobId, driver_id: driverId })
