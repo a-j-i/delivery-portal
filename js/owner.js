@@ -99,4 +99,25 @@ async function loadUnassignedJobs() {
   container.innerHTML = html;
 }
 
+async function assignJob(jobId) {
+  const select = document.getElementById(`driver-${jobId}`);
+  const driverId = select.value;
+
+  try {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/assign-job", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ job_id: jobId, driver_id: driverId })
+    });
+
+    const result = await res.json();
+    alert(result.message || "Assignment complete.");
+
+    // Refresh job list
+    loadUnassignedJobs();
+  } catch (err) {
+    console.error("Assignment failed:", err);
+    alert("Assignment failed. Check console.");
+  }
+}
 
