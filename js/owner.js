@@ -45,7 +45,7 @@ let drivers = [];
 
 async function fetchDrivers() {
   try {
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/drivers");
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/drivers");
     if (!res.ok) throw new Error(`Fetch failed with status ${res.status}`);
     drivers = await res.json();
     console.log("Drivers:", drivers);
