@@ -39,3 +39,41 @@ async function uploadExcel() {
     document.getElementById("uploadStatus").innerText = "❌ Upload error. See console.";
   }
 }
+
+async function loadUnassignedJobs() {
+  const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
+  const jobs = await res.json();
+
+  const container = document.getElementById("jobContainer");
+  if (!jobs.length) {
+    container.innerHTML = "<p>No unassigned jobs found.</p>";
+    return;
+  }
+
+  let html = `
+    <table border="1" cellpadding="5" cellspacing="0">
+      <tr>
+        <th>Job ID</th>
+        <th>Customer Name</th>
+        <th>Suburb</th>
+        <th>Status</th>
+        <th>Driver</th>
+      </tr>
+  `;
+
+  jobs.forEach(job => {
+    html += `
+      <tr>
+        <td>${job.job_id}</td>
+        <td>${job.cust_name}</td>
+        <td>${job.cust_suburb}</td>
+        <td>${job.status}</td>
+        <td>${job.driver_id || "—"}</td>
+      </tr>
+    `;
+  });
+
+  html += `</table>`;
+  container.innerHTML = html;
+}
+
