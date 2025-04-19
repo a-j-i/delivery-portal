@@ -86,7 +86,10 @@ async function loadUnassignedJobs() {
         <td>${job.cust_suburb}</td>
         <td>
           <select id="driver-${job.job_id}">
-            ${drivers.map(driver => `<option value="${driver.driver_id}">${driver.name}</option>`).join('')}
+            ${drivers.map(driver => 
+  `<option value="${driver.driver_id}">${driver.name || driver.driver_id}</option>`
+).join('')}
+
           </select>
         </td>
         <td>
