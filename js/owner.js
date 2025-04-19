@@ -113,7 +113,7 @@ async function assignJob(jobId) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ job_id: jobId, driver_id: driverId })
     });
-
+    await loadUnassignedJobs(); // re-fetch after assignment
     const result = await res.json();
     alert(result.message || "Assignment complete.");
 
