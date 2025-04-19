@@ -48,6 +48,7 @@ async function fetchDrivers() {
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/drivers");
     if (!res.ok) throw new Error(`Fetch failed with status ${res.status}`);
     drivers = await res.json();
+    console.log("Drivers:", drivers);
   } catch (err) {
     console.error("Failed to fetch drivers:", err);
     drivers = []; // Fallback to empty list to avoid crashing .map
