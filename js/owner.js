@@ -40,7 +40,17 @@ async function uploadExcel() {
   }
 }
 
+
+let drivers = [];
+
+async function fetchDrivers() {
+  const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/drivers");
+  drivers = await res.json();
+}
+
 async function loadUnassignedJobs() {
+  await fetchDrivers();  // fetch drivers first
+
   const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
   const jobs = await res.json();
 
@@ -56,8 +66,8 @@ async function loadUnassignedJobs() {
         <th>Job ID</th>
         <th>Customer Name</th>
         <th>Suburb</th>
-        <th>Status</th>
-        <th>Driver</th>
+        <th>Assign To</th>
+        <th>Action</th>
       </tr>
   `;
 
@@ -67,8 +77,14 @@ async function loadUnassignedJobs() {
         <td>${job.job_id}</td>
         <td>${job.cust_name}</td>
         <td>${job.cust_suburb}</td>
-        <td>${job.status}</td>
-        <td>${job.driver_id || "—"}</td>
+        <td>
+          <select id="driver-${job.job_id}">
+            ${drivers.map(driver => `<option value="${driver.driver_id}">${driver.name}</option>`).join('')}
+          </select>
+        </td>
+        <td>
+          <button onclick="assignJob('${job.job_id}')">Assign</button>
+        </td>
       </tr>
     `;
   });
@@ -76,4 +92,5 @@ async function loadUnassignedJobs() {
   html += `</table>`;
   container.innerHTML = html;
 }
+
 
