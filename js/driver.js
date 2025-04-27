@@ -24,48 +24,49 @@ async function fetchDriverJobs() {
     completedJobs = jobs.filter(job => job.status === "completed");
 
     const container = document.getElementById("driverJobs");
-    if (!assignedJobs.length) {
-      container.innerHTML = "<p>No jobs assigned to you yet.</p>";
-      return;
-    }
-
-    container.innerHTML = `
-      <div>
-        <h3>Assigned Jobs</h3>
-        <div id="assignedJobsContainer">
-          ${assignedJobs.map(job => `
-            <div class="job-card" onclick="openJobDetail('${job.job_id}')">
-              <strong>Job ID:</strong> ${job.job_id}<br>
-              <strong>Name:</strong> ${job.cust_name}<br>
-              <strong>Suburb:</strong> ${job.cust_suburb}<br>
-              <strong>Status:</strong> ${job.status}<br>
-              <hr>
-            </div>
-          `).join('')}
-        </div>
-        <br>
-
-        <h3>Completed Jobs</h3>
-        <div id="completedJobsContainer">
-          ${completedJobs.length > 0 ? completedJobs.map(job => `
-            <div class="job-card">
-              <strong>Job ID:</strong> ${job.job_id}<br>
-              <strong>Name:</strong> ${job.cust_name}<br>
-              <strong>Suburb:</strong> ${job.cust_suburb}<br>
-              <strong>Status:</strong> ${job.status}<br>
-              <hr>
-            </div>
-          `).join('') : "<p>No completed jobs yet.</p>"}
-        </div>
-      </div>
-    `;
+    
+    // Initially, show Assigned Jobs by default
+    displayAssignedJobs(container);
   } catch (err) {
     console.error("Failed to fetch driver jobs:", err);
     document.getElementById("driverJobs").innerHTML = "<p>Error fetching jobs. Please try again later.</p>";
   }
 }
 
-fetchDriverJobs();
+function displayAssignedJobs(container) {
+  container.innerHTML = `
+    <h3>Assigned Jobs</h3>
+    ${assignedJobs.length > 0 ? assignedJobs.map(job => `
+      <div class="job-card" onclick="openJobDetail('${job.job_id}')">
+        <strong>Job ID:</strong> ${job.job_id}<br>
+        <strong>Name:</strong> ${job.cust_name}<br>
+        <strong>Suburb:</strong> ${job.cust_suburb}<br>
+        <strong>Status:</strong> ${job.status}<br>
+        <hr>
+      </div>
+    `).join('') : "<p>No assigned jobs yet.</p>"}
+    <button onclick="showCompletedJobs()">Completed Jobs</button>
+  `;
+}
+
+function showCompletedJobs() {
+  const container = document.getElementById("driverJobs");
+
+  // Show completed jobs when the button is clicked
+  container.innerHTML = `
+    <h3>Completed Jobs</h3>
+    ${completedJobs.length > 0 ? completedJobs.map(job => `
+      <div class="job-card">
+        <strong>Job ID:</strong> ${job.job_id}<br>
+        <strong>Name:</strong> ${job.cust_name}<br>
+        <strong>Suburb:</strong> ${job.cust_suburb}<br>
+        <strong>Status:</strong> ${job.status}<br>
+        <hr>
+      </div>
+    `).join('') : "<p>No completed jobs yet.</p>"}
+    <button onclick="displayAssignedJobs(container)">Back to Assigned Jobs</button>
+  `;
+}
 
 // Opens job details when driver clicks a job
 function openJobDetail(jobId) {
@@ -98,14 +99,11 @@ function openJobDetail(jobId) {
   `;
 }
 
-// Go back to the main dashboard (Assigned and Completed Jobs)
+// Go back to the main dashboard (Assigned Jobs section)
 function goBack() {
-  // Re-render the job list with Assigned and Completed Jobs buttons
-  document.getElementById("dashboard-buttons").style.display = "block";
-  document.querySelector("h2").style.display = "block"; 
-  document.querySelector("button[onclick='logout()']").style.display = "inline"; 
-
-  fetchDriverJobs(); // Re-fetch and show the assigned/completed jobs list
+  // Re-render the job list with Assigned Jobs
+  const container = document.getElementById("driverJobs");
+  displayAssignedJobs(container);
 }
 
 // Start job button functionality (you'll implement the backend later)
@@ -146,3 +144,4 @@ function logout() {
   window.location.href = "login.html";
 }
 
+fetchDriverJobs();
