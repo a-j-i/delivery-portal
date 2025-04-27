@@ -11,75 +11,55 @@ if (!groups.includes("driver")) {
   window.location.href = "login.html";
 }
 
-function logout() {
-  localStorage.removeItem("idToken");
-  window.location.href = "login.html";
-}
+const driverId = payload["cognito:username"]; // This will be 'aj2'
 
-const driverId = payload["cognito:username"]; // Example: 'aj2'
-
-// Dummy placeholder data for now
 let assignedJobs = [];
-let completedJobs = [];
 
-// Fetch jobs from backend (this will be improved later)
 async function fetchDriverJobs() {
   try {
-    // Placeholder for real API fetch
-    assignedJobs = [
-      { job_id: "job_1", cust_name: "John", cust_suburb: "Sydney", status: "assigned" },
-      { job_id: "job_2", cust_name: "Mark", cust_suburb: "Thomastown", status: "assigned" }
-    ];
-    completedJobs = [
-      { job_id: "job_3", cust_name: "Alice", cust_suburb: "Melbourne", status: "completed" }
-    ];
-    showAssignedJobs();
+    const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/jobsByDriver?driver_id=${driverId}`);
+    const jobs = await res.json();
+    assignedJobs = jobs; // Save the jobs for later use
+
+    const container = document.getElementById("driverJobs");
+    if (!jobs.length) {
+      container.innerHTML = "<p>No jobs assigned to you yet.</p>";
+      return;
+    }
+
+    container.innerHTML = jobs.map(job => `
+      <div class="job-card" onclick="openJobDetail('${job.job_id}')">
+        <strong>Job ID:</strong> ${job.job_id}<br>
+        <strong>Name:</strong> ${job.cust_name}<br>
+        <strong>Suburb:</strong> ${job.cust_suburb}<br>
+        <strong>Status:</strong> ${job.status}<br>
+        <hr>
+      </div>
+    `).join('');
   } catch (err) {
     console.error("Failed to fetch driver jobs:", err);
     document.getElementById("driverJobs").innerHTML = "<p>Error fetching jobs. Please try again later.</p>";
   }
 }
 
-function showAssignedJobs() {
-  const container = document.getElementById("driverJobs");
-  if (!assignedJobs.length) {
-    container.innerHTML = "<p>No assigned jobs.</p>";
-    return;
-  }
+fetchDriverJobs();
 
-  container.innerHTML = assignedJobs.map(job => `
-    <div class="job-card" onclick="openJobDetail('${job.job_id}')">
-      <strong>${job.cust_name}</strong><br>
-      <span>${job.cust_suburb}</span>
-    </div>
-  `).join('');
-}
-
-function showCompletedJobs() {
-  const container = document.getElementById("driverJobs");
-  if (!completedJobs.length) {
-    container.innerHTML = "<p>No completed jobs.</p>";
-    return;
-  }
-
-  container.innerHTML = completedJobs.map(job => `
-    <div class="job-card">
-      <strong>${job.cust_name}</strong><br>
-      <span>${job.cust_suburb}</span><br>
-      <small>Status: Completed</small>
-    </div>
-  `).join('');
-}
-
+// Opens job details when driver clicks a job
 function openJobDetail(jobId) {
   const job = assignedJobs.find(j => j.job_id === jobId);
   if (!job) return alert("Job not found");
 
+  // Hide dashboard buttons and logout button
+  document.getElementById("dashboard-buttons").style.display = "none";
+  document.querySelector("h2").style.display = "none"; // Hide "Welcome Driver"
+  document.querySelector("button[onclick='logout()']").style.display = "none"; // Hide logout button
+
   const container = document.getElementById("driverJobs");
   container.innerHTML = `
     <h3>Customer: ${job.cust_name}</h3>
-    <p><strong>Address:</strong> (address will be here)</p>
-    <p><strong>Notes:</strong> (instructions will be here)</p>
+    <p><strong>Ph:</strong> ${job.cust_phone || "N/A"}</p>
+    <p><strong>Address:</strong> ${job.cust_add || "(address not available)"}</p>
+    <p><strong>Notes:</strong> ${job.comments || "(no notes)"} </p>
 
     <button onclick="startJob('${job.job_id}')">Start Job</button><br><br>
 
@@ -91,19 +71,53 @@ function openJobDetail(jobId) {
 
     <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
 
-    <button onclick="showAssignedJobs()">← Back to Assigned Jobs</button>
+    <button onclick="goBack()">← Back to Assigned Jobs</button>
   `;
 }
 
-function startJob(jobId) {
-  alert(`Starting job ${jobId}... (send SMS here later)`);
+// Go back to the list of assigned jobs
+function goBack() {
+  document.getElementById("dashboard-buttons").style.display = "block";
+  document.querySelector("h2").style.display = "block"; 
+  document.querySelector("button[onclick='logout()']").style.display = "inline"; 
+  showAssignedJobs();
 }
 
-function completeJob(jobId) {
-  alert(`Completing job ${jobId}... (mark complete later)`);
+// Start job button functionality (you'll implement the backend later)
+async function startJob(jobId) {
+  try {
+    // Placeholder logic to start a job
+    console.log(`Starting job with ID: ${jobId}`);
+    // You can call an API here to update job status to 'in-progress'
+
+    alert("Job started! Notify customer via SMS.");
+    // Code to send SMS can be added here
+
+  } catch (err) {
+    console.error("Failed to start the job:", err);
+    alert("Error starting the job. Please try again.");
+  }
 }
 
-document.getElementById("assignedBtn").addEventListener("click", showAssignedJobs);
-document.getElementById("completedBtn").addEventListener("click", showCompletedJobs);
+// Complete job button functionality (you'll implement the backend later)
+async function completeJob(jobId) {
+  try {
+    // Placeholder logic to complete a job
+    console.log(`Completing job with ID: ${jobId}`);
+    // You can call an API here to update job status to 'completed'
 
-fetchDriverJobs();
+    alert("Job completed! Notify customer via SMS.");
+    // Code to send SMS can be added here
+
+  } catch (err) {
+    console.error("Failed to complete the job:", err);
+    alert("Error completing the job. Please try again.");
+  }
+}
+
+// Log out function
+function logout() {
+  localStorage.removeItem("idToken");
+  window.location.href = "login.html";
+}
+
