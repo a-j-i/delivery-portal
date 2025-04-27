@@ -14,28 +14,51 @@ if (!groups.includes("driver")) {
 const driverId = payload["cognito:username"]; // This will be 'aj2'
 
 let assignedJobs = [];
+let completedJobs = []; // Store completed jobs for later use
 
 async function fetchDriverJobs() {
   try {
     const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/jobsByDriver?driver_id=${driverId}`);
     const jobs = await res.json();
-    assignedJobs = jobs; // Save the jobs for later use
+    assignedJobs = jobs.filter(job => job.status === "assigned");
+    completedJobs = jobs.filter(job => job.status === "completed");
 
     const container = document.getElementById("driverJobs");
-    if (!jobs.length) {
+    if (!assignedJobs.length) {
       container.innerHTML = "<p>No jobs assigned to you yet.</p>";
       return;
     }
 
-    container.innerHTML = jobs.map(job => `
-      <div class="job-card" onclick="openJobDetail('${job.job_id}')">
-        <strong>Job ID:</strong> ${job.job_id}<br>
-        <strong>Name:</strong> ${job.cust_name}<br>
-        <strong>Suburb:</strong> ${job.cust_suburb}<br>
-        <strong>Status:</strong> ${job.status}<br>
-        <hr>
+    container.innerHTML = `
+      <div>
+        <h3>Assigned Jobs</h3>
+        <div id="assignedJobsContainer">
+          ${assignedJobs.map(job => `
+            <div class="job-card" onclick="openJobDetail('${job.job_id}')">
+              <strong>Job ID:</strong> ${job.job_id}<br>
+              <strong>Name:</strong> ${job.cust_name}<br>
+              <strong>Suburb:</strong> ${job.cust_suburb}<br>
+              <strong>Status:</strong> ${job.status}<br>
+              <hr>
+            </div>
+          `).join('')}
+        </div>
+        <br>
+
+        <h3>Completed Jobs</h3>
+        <div id="completedJobsContainer">
+          ${completedJobs.length > 0 ? completedJobs.map(job => `
+            <div class="job-card">
+              <strong>Job ID:</strong> ${job.job_id}<br>
+              <strong>Name:</strong> ${job.cust_name}<br>
+              <strong>Suburb:</strong> ${job.cust_suburb}<br>
+              <strong>Status:</strong> ${job.status}<br>
+              <hr>
+            </div>
+          `).join('') : "<p>No completed jobs yet.</p>"}
+        </div>
       </div>
-    `).join('');
+    `;
   } catch (err) {
     console.error("Failed to fetch driver jobs:", err);
     document.getElementById("driverJobs").innerHTML = "<p>Error fetching jobs. Please try again later.</p>";
@@ -71,16 +94,18 @@ function openJobDetail(jobId) {
 
     <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
 
-    <button onclick="goBack()">← Back to Assigned Jobs</button>
+    <button onclick="goBack()">← Back to Jobs</button>
   `;
 }
 
-// Go back to the list of assigned jobs
+// Go back to the main dashboard (Assigned and Completed Jobs)
 function goBack() {
+  // Re-render the job list with Assigned and Completed Jobs buttons
   document.getElementById("dashboard-buttons").style.display = "block";
   document.querySelector("h2").style.display = "block"; 
   document.querySelector("button[onclick='logout()']").style.display = "inline"; 
-  showAssignedJobs();
+
+  fetchDriverJobs(); // Re-fetch and show the assigned/completed jobs list
 }
 
 // Start job button functionality (you'll implement the backend later)
