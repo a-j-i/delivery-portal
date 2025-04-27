@@ -94,7 +94,7 @@ function openJobDetail(jobId) {
 
     <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
 
-    <button onclick="backToJobs()">← Back to Jobs</button>
+    <button onclick="backToJobs()">Back to Jobs</button>
   `;
 }
 
