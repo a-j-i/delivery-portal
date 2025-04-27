@@ -64,7 +64,7 @@ function showCompletedJobs() {
         <hr>
       </div>
     `).join('') : "<p>No completed jobs yet.</p>"}
-    <button onclick="displayAssignedJobs(container)">Back to Assigned Jobs</button>
+    <button onclick="backToJobs()">Back to Jobs</button>
   `;
 }
 
@@ -74,8 +74,7 @@ function openJobDetail(jobId) {
   if (!job) return alert("Job not found");
 
   // Hide dashboard buttons and logout button
-  document.getElementById("dashboard-buttons").style.display = "none";
-  document.querySelector("h2").style.display = "none"; // Hide "Welcome Driver"
+  document.querySelector("h2").style.display = "none"; // Hide "Driver Dashboard"
   document.querySelector("button[onclick='logout()']").style.display = "none"; // Hide logout button
 
   const container = document.getElementById("driverJobs");
@@ -95,18 +94,16 @@ function openJobDetail(jobId) {
 
     <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
 
-    <button onclick="goBack()">← Back to Jobs</button>
+    <button onclick="backToJobs()">← Back to Jobs</button>
   `;
 }
 
 // Go back to the main dashboard (Assigned Jobs section)
-function goBack() {
-  // Re-render the job list with Assigned Jobs
+function backToJobs() {
   const container = document.getElementById("driverJobs");
   displayAssignedJobs(container);
 
-  // Show the dashboard buttons again
-  document.getElementById("dashboard-buttons").style.display = "block";
+  // Show the "Driver Dashboard" and logout button again
   document.querySelector("h2").style.display = "block";
   document.querySelector("button[onclick='logout()']").style.display = "block";
 }
