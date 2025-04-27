@@ -104,6 +104,11 @@ function goBack() {
   // Re-render the job list with Assigned Jobs
   const container = document.getElementById("driverJobs");
   displayAssignedJobs(container);
+
+  // Show the dashboard buttons again
+  document.getElementById("dashboard-buttons").style.display = "block";
+  document.querySelector("h2").style.display = "block";
+  document.querySelector("button[onclick='logout()']").style.display = "block";
 }
 
 // Start job button functionality (you'll implement the backend later)
