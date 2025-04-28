@@ -158,8 +158,9 @@ async function completeJob(jobId) {
 async function uploadPhotosToS3(jobId) {
   try {
     const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/generatePresignedUrls?job_id=${jobId}&driver_id=${driverId}&count=${selectedFiles.length}`);
+    console.log("Response from presigned URL API:", res);
     const { urls } = await res.json();
-
+    console.log("Presigned URLs received:", urls);
     for (let i = 0; i < selectedFiles.length; i++) {
       const file = selectedFiles[i];
       const { upload_url, file_key } = urls[i];
