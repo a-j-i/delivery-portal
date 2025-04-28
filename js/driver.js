@@ -11,10 +11,13 @@ if (!groups.includes("driver")) {
   window.location.href = "login.html";
 }
 
-const driverId = payload["cognito:username"]; // This will be 'aj2'
+const driverId = payload["cognito:username"];
 
 let assignedJobs = [];
-let completedJobs = []; // Store completed jobs for later use
+let completedJobs = [];
+
+let selectedFiles = [];
+let uploadedPhotoKeys = [];
 
 async function fetchDriverJobs() {
   try {
@@ -23,17 +26,15 @@ async function fetchDriverJobs() {
     assignedJobs = jobs.filter(job => job.status === "assigned");
     completedJobs = jobs.filter(job => job.status === "completed");
 
-    const container = document.getElementById("driverJobs");
-    
-    // Initially, show Assigned Jobs by default
-    displayAssignedJobs(container);
+    displayAssignedJobs();
   } catch (err) {
     console.error("Failed to fetch driver jobs:", err);
     document.getElementById("driverJobs").innerHTML = "<p>Error fetching jobs. Please try again later.</p>";
   }
 }
 
-function displayAssignedJobs(container) {
+function displayAssignedJobs() {
+  const container = document.getElementById("driverJobs");
   container.innerHTML = `
     <h3>Assigned Jobs</h3>
     ${assignedJobs.length > 0 ? assignedJobs.map(job => `
@@ -51,8 +52,6 @@ function displayAssignedJobs(container) {
 
 function showCompletedJobs() {
   const container = document.getElementById("driverJobs");
-
-  // Show completed jobs when the button is clicked
   container.innerHTML = `
     <h3>Completed Jobs</h3>
     ${completedJobs.length > 0 ? completedJobs.map(job => `
@@ -68,82 +67,122 @@ function showCompletedJobs() {
   `;
 }
 
-// Opens job details when driver clicks a job
+function backToJobs() {
+  displayAssignedJobs();
+  document.querySelector("h2").style.display = "block";
+  document.querySelector("button[onclick='logout()']").style.display = "block";
+}
+
 function openJobDetail(jobId) {
   const job = assignedJobs.find(j => j.job_id === jobId);
   if (!job) return alert("Job not found");
 
-  // Hide dashboard buttons and logout button
-  document.querySelector("h2").style.display = "none"; // Hide "Driver Dashboard"
-  document.querySelector("button[onclick='logout()']").style.display = "none"; // Hide logout button
+  selectedFiles = [];
+  uploadedPhotoKeys = [];
 
   const container = document.getElementById("driverJobs");
   container.innerHTML = `
     <h3>Customer: ${job.cust_name}</h3>
-    <p><strong>Ph:</strong> ${job.cust_phone || "N/A"}</p>
-    <p><strong>Address:</strong> ${job.cust_add || "(address not available)"}</p>
+    <p><strong>Phone:</strong> ${job.cust_phone || "N/A"}</p>
+    <p><strong>Address:</strong> ${job.cust_add || "N/A"}</p>
     <p><strong>Notes:</strong> ${job.comments || "(no notes)"} </p>
 
     <button onclick="startJob('${job.job_id}')">Start Job</button><br><br>
 
     <label>Upload Images:</label><br>
-    <input type="file" multiple><br><br>
+    <input type="file" id="photoInput" multiple onchange="handleFileSelection(event)"><br><br>
 
     <label>Driver's Comment:</label><br>
-    <textarea rows="4" cols="50"></textarea><br><br>
+    <textarea id="driverComment" rows="4" cols="50"></textarea><br><br>
 
     <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
 
     <button onclick="backToJobs()">Back to Jobs</button>
   `;
+
+  document.querySelector("h2").style.display = "none";
+  document.querySelector("button[onclick='logout()']").style.display = "none";
 }
 
-// Go back to the main dashboard (Assigned Jobs section)
-function backToJobs() {
-  const container = document.getElementById("driverJobs");
-  displayAssignedJobs(container);
-
-  // Show the "Driver Dashboard" and logout button again
-  document.querySelector("h2").style.display = "block";
-  document.querySelector("button[onclick='logout()']").style.display = "block";
+function handleFileSelection(event) {
+  selectedFiles = Array.from(event.target.files);
 }
 
-// Start job button functionality (you'll implement the backend later)
 async function startJob(jobId) {
   try {
-    // Placeholder logic to start a job
-    console.log(`Starting job with ID: ${jobId}`);
-    // You can call an API here to update job status to 'in-progress'
-
-    alert("Job started! Notify customer via SMS.");
-    // Code to send SMS can be added here
-
+    console.log(`Starting job: ${jobId}`);
+    alert("Job started! Notify customer if needed.");
   } catch (err) {
-    console.error("Failed to start the job:", err);
-    alert("Error starting the job. Please try again.");
+    console.error("Failed to start job:", err);
+    alert("Error starting the job.");
   }
 }
 
-// Complete job button functionality (you'll implement the backend later)
 async function completeJob(jobId) {
   try {
-    // Placeholder logic to complete a job
-    console.log(`Completing job with ID: ${jobId}`);
-    // You can call an API here to update job status to 'completed'
+    if (selectedFiles.length > 0) {
+      await uploadPhotosToS3(jobId);
+    }
 
-    alert("Job completed! Notify customer via SMS.");
-    // Code to send SMS can be added here
+    const driverComment = document.getElementById("driverComment").value;
 
+    const payload = {
+      job_id: jobId,
+      driver_id: driverId,
+      driver_comment: driverComment,
+      photo_keys: uploadedPhotoKeys
+    };
+
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/complete_job", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": idToken
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (res.ok) {
+      alert("✅ Job marked as completed!");
+      fetchDriverJobs();
+    } else {
+      console.error("Failed to complete job:", await res.text());
+      alert("❌ Failed to complete job. Please try again.");
+    }
   } catch (err) {
-    console.error("Failed to complete the job:", err);
-    alert("Error completing the job. Please try again.");
+    console.error("Error completing the job:", err);
+    alert("❌ Error completing the job. Please try again.");
   }
 }
 
-// Log out function
+async function uploadPhotosToS3(jobId) {
+  try {
+    const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/generatePresignedUrls?job_id=${jobId}&driver_id=${driverId}&count=${selectedFiles.length}`);
+    const { urls } = await res.json();
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const file = selectedFiles[i];
+      const { upload_url, file_key } = urls[i];
+
+      await fetch(upload_url, {
+        method: "PUT",
+        headers: { "Content-Type": file.type },
+        body: file
+      });
+
+      uploadedPhotoKeys.push(file_key);
+    }
+    console.log("✅ All images uploaded successfully.");
+  } catch (err) {
+    console.error("Photo upload failed:", err);
+    alert("❌ Failed to upload photos.");
+  }
+}
+
 function logout() {
   localStorage.removeItem("idToken");
   window.location.href = "login.html";
 }
 
+// Fetch jobs on page load
 fetchDriverJobs();
