@@ -82,27 +82,32 @@ function openJobDetail(jobId) {
 
   const container = document.getElementById("driverJobs");
   container.innerHTML = `
-    <h3>Customer: ${job.cust_name}</h3>
-    <p><strong>Phone:</strong> ${job.cust_phone || "N/A"}</p>
-    <p><strong>Address:</strong> ${job.cust_add || "N/A"}</p>
-    <p><strong>Notes:</strong> ${job.comments || "(no notes)"} </p>
+    <div class="job-detail-box">
+      <div class="top-bar">
+        <button class="back-btn" onclick="backToJobs()">Back</button>
+      </div>
 
-    <button onclick="startJob('${job.job_id}')">Start Job</button><br><br>
+      <h3>${job.cust_name}</h3>
+      <p><strong>Ph:</strong> ${job.cust_phone || "N/A"}</p>
+      <p><strong>Address:</strong> ${job.cust_add || "N/A"}</p>
+      <p><strong>Notes:</strong> ${job.comments || "(no notes)"} </p>
 
-    <label>Upload Images:</label><br>
-    <input type="file" id="photoInput" multiple onchange="handleFileSelection(event)"><br><br>
+      <button onclick="startJob('${job.job_id}')">Start Job</button>
 
-    <label>Driver's Comment:</label><br>
-    <textarea id="driverComment" rows="4" cols="50"></textarea><br><br>
+      <label>Upload Images:</label>
+      <input type="file" id="photoInput" multiple onchange="handleFileSelection(event)">
 
-    <button onclick="completeJob('${job.job_id}')">Delivery Complete</button><br><br>
+      <label>Driver's Comment:</label>
+      <textarea id="driverComment" rows="4" cols="50"></textarea>
 
-    <button onclick="backToJobs()">Back to Jobs</button>
+      <button onclick="completeJob('${job.job_id}')">Delivery Complete</button>
+    </div>
   `;
 
   document.querySelector("h2").style.display = "none";
   document.querySelector("button[onclick='logout()']").style.display = "none";
 }
+
 
 function handleFileSelection(event) {
   selectedFiles = Array.from(event.target.files);
