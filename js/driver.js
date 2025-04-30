@@ -94,8 +94,9 @@ function openJobDetail(jobId) {
 
       <button onclick="startJob('${job.job_id}')">Start Job</button>
 
-      <label>Upload Images:</label>
-      <input type="file" id="photoInput" multiple onchange="handleFileSelection(event)">
+      <label>Upload Images:</label><br>
+      <input type="file" id="photoInput" multiple accept="image/*" onchange="handleFileSelection(event)">
+      <div id="imagePreview"></div><br>
 
       <label>Driver's Comment:</label>
       <textarea id="driverComment" rows="4" cols="50"></textarea>
@@ -108,10 +109,56 @@ function openJobDetail(jobId) {
   document.querySelector("button[onclick='logout()']").style.display = "none";
 }
 
+let selectedFiles = [];
 
 function handleFileSelection(event) {
-  selectedFiles = Array.from(event.target.files);
+  const files = Array.from(event.target.files);
+  selectedFiles = [...selectedFiles, ...files];
+  renderPreview();
 }
+
+function renderPreview() {
+  const previewContainer = document.getElementById("imagePreview");
+  previewContainer.innerHTML = '';
+
+  selectedFiles.forEach((file, index) => {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const div = document.createElement('div');
+      div.style.display = "inline-block";
+      div.style.position = "relative";
+      div.style.margin = "5px";
+
+      const img = document.createElement('img');
+      img.src = e.target.result;
+      img.width = 100;
+      img.height = 100;
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '6px';
+
+      const removeBtn = document.createElement('button');
+      removeBtn.innerText = "✖";
+      removeBtn.style.position = "absolute";
+      removeBtn.style.top = "0px";
+      removeBtn.style.right = "0px";
+      removeBtn.style.background = "#ff5555";
+      removeBtn.style.color = "white";
+      removeBtn.style.border = "none";
+      removeBtn.style.borderRadius = "50%";
+      removeBtn.style.cursor = "pointer";
+      removeBtn.onclick = () => {
+        selectedFiles.splice(index, 1);
+        renderPreview();
+      };
+
+      div.appendChild(img);
+      div.appendChild(removeBtn);
+      previewContainer.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 
 async function startJob(jobId) {
   try {
