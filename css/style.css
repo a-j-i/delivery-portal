@@ -1,24 +1,39 @@
-/* Base styles */
+/* Base styling */
 body {
   font-family: Arial, sans-serif;
-  margin: 20px;
-  padding: 0;
   background-color: #f4f4f4;
-  font-size: 18px; /* Increased base font size */
+  margin: 0;
+  padding: 20px;
+  font-size: 18px;
   line-height: 1.6;
 }
 
 h2, h3 {
-  margin-top: 0;
+  text-align: center;
   font-size: 24px;
+  margin-bottom: 20px;
 }
 
+/* Center form area */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+}
+
+/* Form elements */
 input, textarea, button {
-  padding: 16px;
-  margin: 10px 0;
-  font-size: 18px;
   width: 100%;
+  max-width: 100%;
+  font-size: 18px;
+  padding: 14px;
+  margin: 12px 0;
   box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 textarea {
@@ -28,52 +43,27 @@ textarea {
 button {
   background-color: #4CAF50;
   color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
+  border: none;
 }
 
 button:hover {
   background-color: #45a049;
 }
 
-.job-card {
-  border: 1px solid #ccc;
-  background-color: #fff;
-  padding: 20px;
-  margin-bottom: 16px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  font-size: 18px;
-}
-
-/* Responsive adjustments */
+/* Responsive font scaling */
 @media (max-width: 600px) {
   body {
-    margin: 10px;
+    padding: 10px;
   }
 
-  h2 {
-    font-size: 22px;
-    text-align: center;
-  }
-
-  h3 {
+  h2, h3 {
     font-size: 20px;
   }
 
-  .job-card {
-    font-size: 18px;
-    padding: 18px;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 16px;
-  }
-
-  input, textarea {
-    font-size: 18px;
+  input, button, textarea {
+    font-size: 16px;
+    padding: 12px;
   }
 }
