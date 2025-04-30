@@ -37,6 +37,7 @@ input, textarea, button {
   display: block;
 }
 
+
 textarea {
   resize: vertical;
 }
