@@ -132,6 +132,8 @@ async function completeJob(jobId) {
       driver_comment: driverComment,
       photo_keys: uploadedPhotoKeys
     };
+    
+    console.log("Payload:", payload);
 
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/complete_job", {
       method: "POST",
