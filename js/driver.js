@@ -135,15 +135,21 @@ function renderPreview() {
       img.style.borderRadius = '6px';
 
       const removeBtn = document.createElement('button');
-      removeBtn.innerText = "✖";
+      removeBtn.textContent = "X";
       removeBtn.style.position = "absolute";
-      removeBtn.style.top = "0px";
-      removeBtn.style.right = "0px";
-      removeBtn.style.background = "#ff5555";
+      removeBtn.style.top = "4px";
+      removeBtn.style.right = "4px";
+      removeBtn.style.background = "#ff4444";
       removeBtn.style.color = "white";
       removeBtn.style.border = "none";
       removeBtn.style.borderRadius = "50%";
+      removeBtn.style.width = "24px";
+      removeBtn.style.height = "24px";
+      removeBtn.style.fontSize = "14px";
+      removeBtn.style.lineHeight = "24px";
+      removeBtn.style.textAlign = "center";
       removeBtn.style.cursor = "pointer";
+
       removeBtn.onclick = () => {
         selectedFiles.splice(index, 1);
         renderPreview();
