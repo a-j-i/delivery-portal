@@ -125,3 +125,44 @@ button:hover {
   gap: 8px;
   margin-top: 10px;
 }
+.job-card {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 10px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.job-card:hover {
+  transform: scale(1.01);
+}
+
+.job-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.job-number {
+  background-color: #ff8000;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  font-size: 16px;
+}
+
+.job-info {
+  flex-grow: 1;
+  font-size: 16px;
+}
