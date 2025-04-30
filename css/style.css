@@ -2,7 +2,7 @@
 /* Base styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  background-color: #1e1e1e;
   margin: 0;
   padding: 20px;
   font-size: 18px;
@@ -132,7 +132,8 @@ button:hover {
   border-radius: 12px;
   padding: 12px 16px;
   margin: 10px 0;
-  background-color: #fff;
+  background-color: #2a2a2a;
+  color: white;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: transform 0.2s;
