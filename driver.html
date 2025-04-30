@@ -1,26 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Login</title>
+  <title>Driver Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h2>Driver Login</h2>
-  <div class="form-container">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="message" style="color: red;"></p>
+  <h2 id="header">Driver Dashboard</h2>
+
+  <div id="driverJobs">Loading your jobs...</div>
+
+  <div style="text-align: center; margin-top: 20px;">
+    <button onclick="logout()">Logout</button>
   </div>
 
-  <div class="form-container" id="newPasswordForm" style="display:none;">
-    <h3>Set New Password</h3>
-    <input type="password" id="newPassword" placeholder="New Password">
-    <button onclick="submitNewPassword()">Submit</button>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.1/dist/amazon-cognito-identity.min.js"></script>
-  <script src="js/login.js"></script>
+  <script src="js/driver.js"></script>
 </body>
 </html>
