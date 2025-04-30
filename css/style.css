@@ -99,18 +99,20 @@ button:hover {
 }
 
 .back-btn {
-  background-color: #e0e0e0;
-  color: #333;
-  border: none;
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 5px;
+  background-color: transparent;
+  color: hsla(259, 48%, 54%, 1);
+  border: 1px solid hsla(259, 48%, 54%, 1);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.95rem;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .back-btn:hover {
-  background-color: #d5d5d5;
+  background-color: hsla(259, 48%, 94%, 0.2);
 }
+
 
 .job-detail-box button {
   margin-top: 10px;
