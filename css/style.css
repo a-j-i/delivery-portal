@@ -119,3 +119,9 @@ button:hover {
   height: 100vh; /* Full screen height */
   background-color: #f4f4f4; /* optional */
 }
+#imagePreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
