@@ -26,14 +26,15 @@ h2, h3 {
 
 /* Form elements */
 input, textarea, button {
-  width: 100%;
-  max-width: 100%;
+  width: 70%;
+  max-width: 320px;
   font-size: 18px;
   padding: 14px;
-  margin: 12px 0;
+  margin: 12px auto;   /* centers and spaces */
   box-sizing: border-box;
   border-radius: 6px;
   border: 1px solid #ccc;
+  display: block;
 }
 
 textarea {
