@@ -95,7 +95,8 @@ function openJobDetail(jobId) {
       <button onclick="startJob('${job.job_id}')">Start Job</button>
 
       <label>Upload Images:</label><br>
-      <input type="file" id="photoInput" multiple accept="image/*" onchange="handleFileSelection(event)">
+      <input type="file" id="photoInput" multiple accept="image/*" style="display: none;" onchange="handleFileSelection(event)">
+      <button onclick="document.getElementById('photoInput').click()">Upload Images</button>
       <div id="imagePreview"></div><br>
 
       <label>Driver's Comment:</label>
@@ -148,6 +149,9 @@ function renderPreview() {
       removeBtn.style.fontSize = "14px";
       removeBtn.style.lineHeight = "24px";
       removeBtn.style.textAlign = "center";
+      removeBtn.style.display = "flex";              
+      removeBtn.style.alignItems = "center";         
+      removeBtn.style.justifyContent = "center";
       removeBtn.style.cursor = "pointer";
 
       removeBtn.onclick = () => {
