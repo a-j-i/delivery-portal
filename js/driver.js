@@ -37,7 +37,7 @@ function displayAssignedJobs() {
   const container = document.getElementById("driverJobs");
   container.innerHTML = `
     <h3>Assigned Jobs</h3>
-    ${assignedJobs.length > 0 ? assignedJobs.map(job => `
+    ${assignedJobs.length > 0 ? assignedJobs.map((job, index) => `
       <div class="job-card" onclick="openJobDetail('${job.job_id}')">
         <div class="job-header">
           <div class="job-number">${index + 1}</div>
@@ -53,22 +53,28 @@ function displayAssignedJobs() {
   `;
 }
 
+
 function showCompletedJobs() {
   const container = document.getElementById("driverJobs");
+
   container.innerHTML = `
     <h3>Completed Jobs</h3>
-    ${completedJobs.length > 0 ? completedJobs.map(job => `
+    ${completedJobs.length > 0 ? completedJobs.map((job, index) => `
       <div class="job-card">
-        <strong>Job ID:</strong> ${job.job_id}<br>
-        <strong>Name:</strong> ${job.cust_name}<br>
-        <strong>Suburb:</strong> ${job.cust_suburb}<br>
-        <strong>Status:</strong> ${job.status}<br>
-        <hr>
+        <div class="job-header">
+          <div class="job-number">${index + 1}</div>
+          <div class="job-info">
+            <strong>${job.cust_name}</strong><br>
+            ${job.cust_suburb}<br>
+            <small>Status: ${job.status}</small>
+          </div>
+        </div>
       </div>
     `).join('') : "<p>No completed jobs yet.</p>"}
-    <button onclick="backToJobs()">Back to Jobs</button>
+    <button onclick="backToJobs()">Back to Assigned Jobs</button>
   `;
 }
+
 
 function backToJobs() {
   displayAssignedJobs();
