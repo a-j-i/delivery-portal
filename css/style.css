@@ -111,4 +111,11 @@ button:hover {
   margin-top: 10px;
   width: 100%;
 }
+.center-screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full screen height */
+  background-color: #f4f4f4; /* optional */
+}
 
