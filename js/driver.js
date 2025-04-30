@@ -109,8 +109,6 @@ function openJobDetail(jobId) {
   document.querySelector("button[onclick='logout()']").style.display = "none";
 }
 
-let selectedFiles = [];
-
 function handleFileSelection(event) {
   const files = Array.from(event.target.files);
   selectedFiles = [...selectedFiles, ...files];
