@@ -1,26 +1,24 @@
+
+<!-- login html -->
 <!DOCTYPE html>
 <html>
 <head>
   <title>Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.0/dist/amazon-cognito-identity.min.js"></script>
 </head>
 <body>
-  <h2>Driver Login</h2>
-  <div class="form-container">
-    <input type="email" id="email" placeholder="Email">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="login()">Login</button>
-    <p id="message" style="color: red;"></p>
+  <h2>Login</h2>
+  <input id="email" type="email" placeholder="Email"><br><br>
+  <input id="password" type="password" placeholder="Password"><br><br>
+  <button onclick="login()">Login</button>
+  <p id="message"></p>
+
+  <div id="newPasswordForm" style="display:none;">
+    <input id="newPassword" type="password" placeholder="New Password"><br><br>
+    <button onclick="submitNewPassword()">Submit New Password</button>
   </div>
 
-  <div class="form-container" id="newPasswordForm" style="display:none;">
-    <h3>Set New Password</h3>
-    <input type="password" id="newPassword" placeholder="New Password">
-    <button onclick="submitNewPassword()">Submit</button>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/amazon-cognito-identity-js@6.2.1/dist/amazon-cognito-identity.min.js"></script>
   <script src="js/login.js"></script>
 </body>
 </html>
