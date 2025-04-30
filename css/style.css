@@ -1,50 +1,70 @@
+/* Base styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f0f2f5;
+  background-color: #f4f4f4;
   margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-.login-wrapper {
-  text-align: center;
-}
-
-.login-box {
-  background-color: white;
-  padding: 24px;
-  border-radius: 8px;
-  max-width: 360px;
-  width: 100%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
-}
-
-.login-box input {
-  width: 100%;
-  padding: 14px;
-  margin: 10px 0;
+  padding: 20px;
   font-size: 18px;
+  line-height: 1.6;
+}
+
+h2, h3 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+/* Center form area */
+.form-container {
+  max-width: 400px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+}
+
+/* Form elements */
+input, textarea, button {
+  width: 70%;
+  max-width: 320px;
+  font-size: 18px;
+  padding: 14px;
+  margin: 12px auto;   /* centers and spaces */
+  box-sizing: border-box;
   border-radius: 6px;
   border: 1px solid #ccc;
-  box-sizing: border-box;
+  display: block;
 }
 
-.login-box button {
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  background-color: #1877f2; /* Facebook Blue */
+textarea {
+  resize: vertical;
+}
+
+button {
+  background-color: #4CAF50;
   color: white;
   font-weight: bold;
-  border: none;
-  border-radius: 6px;
   cursor: pointer;
+  border: none;
 }
 
-.login-box button:hover {
-  background-color: #155edc;
+button:hover {
+  background-color: #45a049;
+}
+
+/* Responsive font scaling */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  h2, h3 {
+    font-size: 20px;
+  }
+
+  input, button, textarea {
+    font-size: 16px;
+    padding: 12px;
+  }
 }
