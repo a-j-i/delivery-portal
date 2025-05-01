@@ -2,7 +2,7 @@ const idToken = localStorage.getItem("idToken");
 if (!idToken) {
   window.location.href = "login.html";
 }
-
+let drivers = [];
 const payload = JSON.parse(atob(idToken.split('.')[1]));
 const groups = payload["cognito:groups"] || [];
 
