@@ -292,3 +292,85 @@ body {
   font-family: Arial, sans-serif;
   overflow: hidden; /* prevent double scrollbars */
 }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #e0e0e0;
+  padding: 20px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-right: 1px solid #ccc;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.sidebar button {
+  background-color: #ccc;
+  color: #222;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.sidebar button:hover {
+  background-color: #bbb;
+}
+
+.content {
+  flex-grow: 1;
+  background-color: #fdfdff;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+input[type="file"],
+button,
+select {
+  font-size: 16px;
+  padding: 10px;
+  margin-top: 10px;
+  display: block;
+  border-radius: 6px;
+}
+
+button {
+  background-color: hsla(259, 48%, 54%, 1);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button:hover {
+  background-color: hsla(259, 48%, 44%, 1);
+}
+
+select {
+  background-color: #f0f0ff;
+  border: 1px solid #aaa;
+  width: 100%;
+  max-width: 240px;
+}
