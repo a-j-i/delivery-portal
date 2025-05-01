@@ -1,6 +1,13 @@
 const idToken = localStorage.getItem("idToken");
 if (!idToken) window.location.href = "login.html";
 
+function showSection(sectionId) {
+  const sections = ['uploadSection', 'unassignedSection', 'assignedSection', 'completedSection', 'failedSection'];
+  sections.forEach(id => {
+    document.getElementById(id).style.display = (id === sectionId + 'Section') ? 'block' : 'none';
+  });
+}
+
 async function uploadExcel() {
   const fileInput = document.getElementById("excelFile");
   const file = fileInput.files[0];
