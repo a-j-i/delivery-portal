@@ -52,9 +52,6 @@ async function uploadExcel() {
   }
 }
 
-
-let drivers = [];
-
 async function fetchDrivers() {
   try {
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/drivers");
