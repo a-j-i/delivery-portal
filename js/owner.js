@@ -2,11 +2,16 @@ const idToken = localStorage.getItem("idToken");
 if (!idToken) window.location.href = "login.html";
 
 function showSection(sectionId) {
-  const sections = ['uploadSection', 'unassignedSection', 'assignedSection', 'completedSection', 'failedSection'];
-  sections.forEach(id => {
-    document.getElementById(id).style.display = (id === sectionId + 'Section') ? 'block' : 'none';
-  });
+  document.querySelectorAll(".section").forEach(div => div.style.display = "none");
+  document.getElementById(sectionId).style.display = "block";
 }
+
+document.getElementById("btn-unassigned").addEventListener("click", () => {
+  const container = document.getElementById("jobContainer");
+  container.innerHTML = "<p>Loading jobs...</p>";
+  loadUnassignedJobs();
+});
+
 
 async function uploadExcel() {
   const fileInput = document.getElementById("excelFile");
