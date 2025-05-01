@@ -1,6 +1,6 @@
 const idToken = localStorage.getItem("idToken");
 if (!idToken) window.location.href = "login.html";
-
+let drivers = [];
 function showSection(sectionId) {
   document.querySelectorAll(".section").forEach(div => div.style.display = "none");
   document.getElementById(sectionId).style.display = "block";
