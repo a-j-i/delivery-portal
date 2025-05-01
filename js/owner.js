@@ -55,54 +55,6 @@ async function fetchDrivers() {
   }
 }
 
-/*async function loadUnassignedJobs() {
-  await fetchDrivers();  // fetch drivers first
-
-  const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
-  const jobs = await res.json();
-
-  const container = document.getElementById("jobContainer");
-  if (!jobs.length) {
-    container.innerHTML = "<p>No unassigned jobs found.</p>";
-    return;
-  }
-
-  let html = `
-    <table border="1" cellpadding="5" cellspacing="0">
-      <tr>
-        <th>Job ID</th>
-        <th>Customer Name</th>
-        <th>Suburb</th>
-        <th>Assign To</th>
-        <th>Action</th>
-      </tr>
-  `;
-
-  jobs.forEach(job => {
-    html += `
-      <tr>
-        <td>${job.job_id}</td>
-        <td>${job.cust_name}</td>
-        <td>${job.cust_suburb}</td>
-        <td>
-          <select id="driver-${job.job_id}">
-            ${drivers.map(driver => 
-  `<option value="${driver.driver_id}">${driver.name || driver.driver_id}</option>`
-).join('')}
-
-          </select>
-        </td>
-        <td>
-          <button onclick="assignJob('${job.job_id}')">Assign</button>
-        </td>
-      </tr>
-    `;
-  });
-
-  html += `</table>`;
-  container.innerHTML = html;
-}*/
-
 async function loadUnassignedJobs() {
   console.log("New layout loaded");
   await fetchDrivers();
