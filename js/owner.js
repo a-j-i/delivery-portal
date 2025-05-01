@@ -104,6 +104,7 @@ async function fetchDrivers() {
 }*/
 
 async function loadUnassignedJobs() {
+  console.log("New layout loaded");
   await fetchDrivers();
 
   const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
