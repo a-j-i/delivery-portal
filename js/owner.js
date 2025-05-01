@@ -55,7 +55,7 @@ async function fetchDrivers() {
   }
 }
 
-async function loadUnassignedJobs() {
+/*async function loadUnassignedJobs() {
   await fetchDrivers();  // fetch drivers first
 
   const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
@@ -101,7 +101,41 @@ async function loadUnassignedJobs() {
 
   html += `</table>`;
   container.innerHTML = html;
+}*/
+
+async function loadUnassignedJobs() {
+  await fetchDrivers();
+
+  const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassigned-jobs");
+  const jobs = await res.json();
+
+  const container = document.getElementById("jobContainer");
+  if (!jobs.length) {
+    container.innerHTML = "<p>No unassigned jobs found.</p>";
+    return;
+  }
+
+  container.innerHTML = jobs.map((job, index) => `
+    <div class="job-card">
+      <div class="job-header">
+        <div class="job-number">${index + 1}</div>
+        <div class="job-info">
+          <strong>${job.job_id}</strong><br>
+          ${job.cust_name} (${job.cust_suburb})<br>
+        </div>
+      </div>
+      <div style="margin-top: 10px; width: 100%;">
+        <select id="driver-${job.job_id}">
+          ${drivers.map(driver => `
+            <option value="${driver.driver_id}">${driver.name || driver.driver_id}</option>
+          `).join('')}
+        </select>
+        <button onclick="assignJob('${job.job_id}')">Assign</button>
+      </div>
+    </div>
+  `).join('');
 }
+
 
 async function assignJob(jobId) {
   const select = document.getElementById(`driver-${jobId}`);
