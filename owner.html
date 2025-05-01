@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,40 +7,66 @@
 </head>
 <body>
 
-<div class="container">
+<div class="dashboard-container">
   <!-- Sidebar -->
   <div class="sidebar">
-    <h3>Dashboard</h3>
-    <button onclick="showSection('upload')">Upload Excel</button>
-    <button id="btn-unassigned" onclick="showSection('unassigned')">Unassigned Jobs</button>
-    <button onclick="showSection('assigned')">Assigned Jobs</button>
-    <button onclick="showSection('completed')">Completed Jobs</button>
-    <button onclick="showSection('failed')">Failed Jobs</button>
+    <h3>Owner Panel</h3>
+    <button onclick="showSection('upload')"> Upload Excel</button>
+    <button onclick="showSection('unassigned')"> Unassigned Jobs</button>
+    <button onclick="showSection('assigned')"> Assigned Jobs</button>
+    <button onclick="showSection('completed')"> Completed Jobs</button>
+    <button onclick="showSection('failed')"> Failed Jobs</button>
   </div>
 
-  <!-- Main Content Area -->
-  <div class="content">
+  <!-- Main content area -->
+  <div class="main-content">
     <!-- Upload Excel -->
-    <div id="upload" class="section">
+    <div id="upload" class="section" style="display: block;">
       <h2>Upload Job Excel</h2>
-      <input type="file" id="excelFile" accept=".xlsx,.xls">
-      <button onclick="uploadExcel()">Upload Excel</button>
-      <p id="uploadStatus"></p>
+      <div class="job-card">
+        <input type="file" id="excelFile" accept=".xlsx,.xls">
+        <button onclick="uploadExcel()">Upload Excel</button>
+        <p id="uploadStatus"></p>
+      </div>
     </div>
 
     <!-- Unassigned Jobs -->
-    <div id="unassigned" class="section" style="display: none;">
+    <div id="unassigned" class="section">
       <h2>Unassigned Jobs</h2>
-      <div id="jobContainer"><p>Click "Unassigned Jobs" to load.</p></div>
+      <div class="job-card">
+        <button onclick="loadUnassignedJobs()">Refresh</button>
+      </div>
+      <div id="jobContainer"></div>
     </div>
 
-    <!-- Placeholder for future sections -->
-    <div id="assigned" class="section" style="display: none;"><h2>Assigned Jobs</h2></div>
-    <div id="completed" class="section" style="display: none;"><h2>Completed Jobs</h2></div>
-    <div id="failed" class="section" style="display: none;"><h2>Failed Jobs</h2></div>
+    <!-- Assigned Jobs -->
+    <div id="assigned" class="section">
+      <h2>Assigned Jobs</h2>
+      <p>Feature coming soon...</p>
+    </div>
+
+    <!-- Completed Jobs -->
+    <div id="completed" class="section">
+      <h2>Completed Jobs</h2>
+      <p>Feature coming soon...</p>
+    </div>
+
+    <!-- Failed Jobs -->
+    <div id="failed" class="section">
+      <h2>Failed Jobs</h2>
+      <p>Feature coming soon...</p>
+    </div>
   </div>
 </div>
 
 <script src="js/owner.js"></script>
+<script>
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(div => {
+      div.style.display = 'none';
+    });
+    document.getElementById(id).style.display = 'block';
+  }
+</script>
 </body>
 </html>
