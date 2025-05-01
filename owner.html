@@ -1,7 +1,12 @@
-
 <!DOCTYPE html>
-<h2>Upload Job Excel</h2>
+<html>
+<head>
+  <title>Owner Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
 
+<h2>Upload Job Excel</h2>
 <div class="job-card">
   <input type="file" id="excelFile" accept=".xlsx,.xls">
   <button onclick="uploadExcel()">Upload Excel</button>
@@ -9,8 +14,11 @@
 </div>
 
 <h2>Unassigned Jobs</h2>
-<button onclick="loadUnassignedJobs()">Refresh</button>
+<div class="job-card">
+  <button onclick="loadUnassignedJobs()">Refresh</button>
+</div>
 <div id="jobContainer"></div>
 
 <script src="js/owner.js"></script>
-
+</body>
+</html>
