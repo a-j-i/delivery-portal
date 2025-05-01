@@ -218,3 +218,77 @@ button:hover {
 .section {
   display: none;
 }
+
+/* Entire dashboard container */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden; /* Prevent sidebar scroll */
+}
+
+/* Left sidebar styling */
+.sidebar {
+  width: 220px;
+  background-color: #2c2c3e; /* darker purple/grey */
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* Sidebar heading */
+.sidebar h3 {
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Sidebar buttons */
+.sidebar button {
+  background-color: hsla(259, 48%, 54%, 1); /* Amethyst */
+  border: none;
+  color: white;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.sidebar button:hover {
+  background-color: hsla(259, 48%, 44%, 1);
+}
+
+/* Right content area */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background-color: #efeff6; /* light amethyst grey background */
+  height: 100vh;
+}
+
+/* Each page section */
+.section {
+  display: none;
+}
+
+/* Job card spacing and scroll container */
+.job-card {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+/* Body styling override if needed */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* prevent double scrollbars */
+}
