@@ -1,157 +1,80 @@
-
-/* Base styling */
+/* General styling */
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
   margin: 0;
-  padding: 20px;
+  padding: 0;
+  overflow: hidden;
+  background-color: #efeff6; /* Light background for right pane */
   font-size: 18px;
   line-height: 1.6;
 }
 
-h2, h3 {
-  text-align: center;
-  font-size: 24px;
+/* Dashboard layout */
+.dashboard-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Sidebar styling */
+.sidebar {
+  width: 220px;
+  background-color: #2c2c3e; /* Deep violet/grey */
+  padding: 20px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.sidebar h3 {
+  margin-top: 0;
   margin-bottom: 20px;
 }
 
-/* Center form area */
-.form-container {
-  max-width: 400px;
-  margin: 0 auto;
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.1);
-}
-
-/* Form elements */
-input, textarea, button {
-  width: 70%;
-  max-width: 320px;
-  font-size: 18px;
-  padding: 14px;
-  margin: 12px auto;   /* centers and spaces */
-  box-sizing: border-box;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  display: block;
-}
-
-
-textarea {
-  resize: vertical;
-}
-
-button {
+.sidebar button {
   background-color: hsla(259, 48%, 54%, 1); /* Amethyst */
   color: white;
   border: none;
-  border-radius: 20px;
-  padding: 12px 16px;
-  font-size: 1rem;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 16px;
   cursor: pointer;
+  text-align: left;
   transition: background-color 0.2s ease;
 }
 
-button:hover {
-  background-color: hsla(259, 48%, 44%, 1); /* slightly darker on hover */
+.sidebar button:hover {
+  background-color: hsla(259, 48%, 44%, 1); /* Slightly darker */
 }
 
-
-/* Responsive font scaling */
-@media (max-width: 600px) {
-  body {
-    padding: 10px;
-  }
-
-  h2, h3 {
-    font-size: 20px;
-  }
-
-  input, button, textarea {
-    font-size: 16px;
-    padding: 12px;
-  }
+/* Main content area */
+.main-content {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background-color: #efeff6; /* Light violet-grey */
 }
-.job-detail-box {
+
+.section {
+  display: none;
+}
+
+/* Upload & job card styling */
+.job-card {
   background-color: #ffffff;
   border: 1px solid #ccc;
   border-radius: 10px;
   padding: 16px;
-  margin: 0 auto;
-  max-width: 500px;
+  margin: 12px 0;
   box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-}
-
-.job-detail-box p {
-  margin: 6px 0;
-}
-
-.job-detail-box input,
-.job-detail-box textarea {
-  margin: 8px 0;
-}
-
-.top-bar {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.back-btn {
-  background-color: transparent;
-  color: hsla(259, 48%, 54%, 1);
-  border: 1px solid hsla(259, 48%, 54%, 1);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 0.95rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.back-btn:hover {
-  background-color: hsla(259, 48%, 94%, 0.2);
-}
-
-
-.job-detail-box button {
-  margin-top: 10px;
-  width: 100%;
-}
-.center-screen {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Full screen height */
-  background-color: #f4f4f4; /* optional */
-}
-#imagePreview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-.job-card {
-  display: flex;
-  align-items: center;
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 12px 16px;
-  margin: 10px 0;
-  background-color: #fff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-
-.job-card:hover {
-  transform: scale(1.01);
 }
 
 .job-header {
   display: flex;
   align-items: center;
-  width: 100%;
+  margin-bottom: 10px;
 }
 
 .job-number {
@@ -173,191 +96,19 @@ button:hover {
   font-size: 16px;
 }
 
-.dashboard-container {
-  display: flex;
-  height: 100vh;
-}
-
-.sidebar {
-  width: 220px;
-  background-color: #3d3d5c;
-  padding: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sidebar h3 {
-  color: #fff;
-  margin-bottom: 20px;
-}
-
-.sidebar button {
-  background-color: hsla(259, 48%, 54%, 1);
-  border: none;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.sidebar button:hover {
-  background-color: hsla(259, 48%, 44%, 1);
-}
-
-.main-content {
-  flex-grow: 1;
-  padding: 30px;
-  overflow-y: auto;
-  background-color: #f7f7f7;
-}
-
-.section {
-  display: none;
-}
-
-/* Entire dashboard container */
-.dashboard-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden; /* Prevent sidebar scroll */
-}
-
-/* Left sidebar styling */
-.sidebar {
-  width: 220px;
-  background-color: #2c2c3e; /* darker purple/grey */
-  padding: 20px;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  flex-shrink: 0;
-  position: relative;
-}
-
-/* Sidebar heading */
-.sidebar h3 {
-  color: #fff;
-  margin-bottom: 20px;
-}
-
-/* Sidebar buttons */
-.sidebar button {
-  background-color: hsla(259, 48%, 54%, 1); /* Amethyst */
-  border: none;
-  color: white;
-  padding: 10px;
-  font-size: 16px;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: left;
-}
-
-.sidebar button:hover {
-  background-color: hsla(259, 48%, 44%, 1);
-}
-
-/* Right content area */
-.main-content {
-  flex-grow: 1;
-  padding: 30px;
-  overflow-y: auto;
-  background-color: #efeff6; /* light amethyst grey background */
-  height: 100vh;
-}
-
-/* Each page section */
-.section {
-  display: none;
-}
-
-/* Job card spacing and scroll container */
-.job-card {
-  background-color: #ffffff;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 16px;
-  margin: 12px 0;
-  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
-}
-
-/* Body styling override if needed */
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  overflow: hidden; /* prevent double scrollbars */
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.sidebar {
-  width: 220px;
-  background-color: #e0e0e0;
-  padding: 20px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border-right: 1px solid #ccc;
-}
-
-.sidebar h3 {
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.sidebar button {
-  background-color: #ccc;
-  color: #222;
-  padding: 10px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.sidebar button:hover {
-  background-color: #bbb;
-}
-
-.content {
-  flex-grow: 1;
-  background-color: #fdfdff;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.section {
-  margin-top: 20px;
-}
-
+/* Form elements */
 input[type="file"],
 button,
 select {
   font-size: 16px;
   padding: 10px;
   margin-top: 10px;
-  display: block;
   border-radius: 6px;
+  display: block;
 }
 
 button {
-  background-color: hsla(259, 48%, 54%, 1);
+  background-color: hsla(259, 48%, 54%, 1); /* Amethyst */
   color: white;
   border: none;
   cursor: pointer;
@@ -373,4 +124,31 @@ select {
   border: 1px solid #aaa;
   width: 100%;
   max-width: 240px;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+/* Responsive scaling */
+@media (max-width: 600px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .sidebar {
+    width: 180px;
+    padding: 12px;
+  }
+
+  .sidebar button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .job-info {
+    font-size: 14px;
+  }
+
+  input, select, button {
+    font-size: 14px;
+  }
 }
