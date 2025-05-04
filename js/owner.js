@@ -169,7 +169,7 @@ async function loadCompletedJobs() {
   try {
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/completedJobs");
     const data = await res.json();
-    const jobs = data.jobs;
+    const jobs = data.jobs || [];
 
     if (!jobs.length) {
       container.innerHTML = "<p>No completed jobs found.</p>";
@@ -177,17 +177,15 @@ async function loadCompletedJobs() {
     }
 
     container.innerHTML = jobs.map((job, index) => `
-      <div class="job-card">
+      <div class="job-card" onclick='showCompletedJobDetail(${JSON.stringify(job)})'>
         <div class="job-header">
           <div class="job-number">${index + 1}</div>
           <div class="job-info">
             <strong>${job.job_id}</strong><br>
             ${job.cust_name} (${job.cust_suburb})<br>
             Driver: <strong>${job.driver_id}</strong><br>
-            <small>Status: ${job.status}</small><br>
           </div>
         </div>
-        <button onclick='viewJobPhotos(${JSON.stringify(job.photo_keys || [])})'>View Photos</button>
       </div>
     `).join('');
   } catch (err) {
@@ -195,6 +193,32 @@ async function loadCompletedJobs() {
     container.innerHTML = "<p>Error loading completed jobs.</p>";
   }
 }
+
+function showCompletedJobDetail(job) {
+  const container = document.getElementById("completedJobContainer");
+  container.innerHTML = `
+    <div class="job-detail-box">
+      <div class="top-bar">
+        <button class="back-btn" onclick="loadCompletedJobs()">Back</button>
+      </div>
+
+      <h3>Job ID: ${job.job_id}</h3>
+      <p><strong>Customer:</strong> ${job.cust_name}</p>
+      <p><strong>Phone:</strong> ${job.cust_phone || 'N/A'}</p>
+      <p><strong>Address:</strong> ${job.cust_add || 'N/A'} (${job.cust_suburb || ''})</p>
+      <p><strong>Driver:</strong> ${job.driver_id}</p>
+      <p><strong>Status:</strong> ${job.status}</p>
+      <p><strong>Comments:</strong> ${job.comments || '(no comments)'}</p>
+      <p><strong>Driver's Comment:</strong> ${job.drivers_comment || '(none)'}</p>
+
+      ${job.photo_keys && job.photo_keys.length > 0 ? `
+        <button onclick="viewJobPhotos('${job.job_id}', '${job.driver_id}', ${job.photo_keys.length})">View Photos</button>
+        <div id="photoContainer"></div>
+      ` : '<p>No photos uploaded.</p>'}
+    </div>
+  `;
+}
+
 
 async function viewJobPhotos(photoKeys) {
   if (!photoKeys.length) {
