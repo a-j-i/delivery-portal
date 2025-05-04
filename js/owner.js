@@ -211,7 +211,7 @@ function showCompletedJobDetail(job) {
       <p><strong>Comments:</strong> ${job.comments || '(no comments)'}</p>
       <p><strong>Driver's Comment:</strong> ${job.drivers_comment || '(none)'}</p>
 
-      ${job.photo_keys && job.photo_keys.length > 0 ? `
+      ${Array.isArray(job.photo_keys) && job.photo_keys.length > 0 ? `
         <button onclick="viewJobPhotos('${job.job_id}', '${job.driver_id}', ${job.photo_keys.length})">View Photos</button>
         <div id="photoContainer"></div>
       ` : '<p>No photos uploaded.</p>'}
