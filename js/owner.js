@@ -189,7 +189,7 @@ async function loadCompletedJobs() {
             <small>Status: ${job.status}</small><br>
           </div>
         </div>
-        <button onclick="viewJobPhotos('${job.job_id}', '${job.driver_id}', ${job.photo_keys?.length || 0})">View Photos</button>
+        <button onclick='viewJobPhotos(${JSON.stringify(job.photo_keys || [])})'>View Photos</button>
       </div>
     `).join('');
   } catch (err) {
@@ -198,18 +198,31 @@ async function loadCompletedJobs() {
   }
 }
 
-async function viewJobPhotos(jobId, driverId, count) {
+async function viewJobPhotos(photoKeys) {
+  if (!photoKeys.length) {
+    alert("No photos available for this job.");
+    return;
+  }
+
   try {
-    const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/photoUrlGenerator?job_id=${jobId}&driver_id=${driverId}&count=${count}`);
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/photoUrlGenerator", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ photo_keys: photoKeys })
+    });
+
     const data = await res.json();
-    const urls = data.urls;
+    const urls = data.photo_urls;
 
     const container = document.getElementById("photoContainer");
     container.innerHTML = "";
 
-    urls.forEach(({ url }) => {
+    urls.forEach(url => {
       const img = document.createElement("img");
       img.src = url;
+      img.style.maxWidth = "300px";
+      img.style.margin = "10px";
+      img.style.borderRadius = "8px";
       container.appendChild(img);
     });
 
@@ -219,6 +232,7 @@ async function viewJobPhotos(jobId, driverId, count) {
     alert("Could not load photos. Try again later.");
   }
 }
+
 
 function closePhotoModal() {
   document.getElementById("photoModal").style.display = "none";
