@@ -117,7 +117,7 @@ async function loadAssignedJobs() {
   container.innerHTML = "<p>Loading assigned jobs...</p>";
 
   try {
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/assigned-jobs");
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/getAssignedJobs");
     const jobs = await res.json();
 
     if (!jobs.length) {
