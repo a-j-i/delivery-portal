@@ -221,7 +221,7 @@ function showCompletedJobDetail(job) {
 
 
 async function viewJobPhotos(photoKeys) {
-  if (!photoKeys.length) {
+  if (!photoKeys || !photoKeys.length) {
     alert("No photos available for this job.");
     return;
   }
@@ -234,7 +234,7 @@ async function viewJobPhotos(photoKeys) {
     });
 
     const data = await res.json();
-    const urls = data.photo_urls;
+    const urls = data.photo_urls || [];
 
     const container = document.getElementById("photoContainer");
     container.innerHTML = "";
@@ -247,13 +247,12 @@ async function viewJobPhotos(photoKeys) {
       img.style.borderRadius = "8px";
       container.appendChild(img);
     });
-
-    document.getElementById("photoModal").style.display = "flex";
   } catch (err) {
     console.error("Failed to load photos:", err);
     alert("Could not load photos. Try again later.");
   }
 }
+
 
 
 function closePhotoModal() {
