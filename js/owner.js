@@ -146,7 +146,7 @@ async function loadAssignedJobs() {
 
 async function unassignJob(jobId) {
   try {
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unassign-job", {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/unAssignJob", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ job_id: jobId })
