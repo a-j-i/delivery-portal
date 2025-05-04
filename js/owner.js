@@ -160,3 +160,67 @@ async function unassignJob(jobId) {
     alert("Failed to unassign job.");
   }
 }
+
+
+async function loadCompletedJobs() {
+  const container = document.getElementById("completedJobContainer");
+  container.innerHTML = "<p>Loading completed jobs...</p>";
+
+  try {
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/getAssignedJobs");
+    const jobs = await res.json();
+
+    // Filter jobs marked as completed
+    const completedJobs = jobs.filter(job => job.status === "completed");
+
+    if (!completedJobs.length) {
+      container.innerHTML = "<p>No completed jobs found.</p>";
+      return;
+    }
+
+    container.innerHTML = completedJobs.map((job, index) => `
+      <div class="job-card">
+        <div class="job-header">
+          <div class="job-number">${index + 1}</div>
+          <div class="job-info">
+            <strong>${job.job_id}</strong><br>
+            ${job.cust_name} (${job.cust_suburb})<br>
+            Driver: <strong>${job.driver_id}</strong><br>
+            <small>Status: ${job.status}</small><br>
+          </div>
+        </div>
+        <button onclick="viewJobPhotos('${job.job_id}', '${job.driver_id}', ${job.photo_keys?.length || 0})">View Photos</button>
+      </div>
+    `).join('');
+  } catch (err) {
+    console.error("Failed to fetch completed jobs:", err);
+    container.innerHTML = "<p>Error loading completed jobs.</p>";
+  }
+}
+
+async function viewJobPhotos(jobId, driverId, count) {
+  try {
+    const res = await fetch(`https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/photoUrlGenerator?job_id=${jobId}&driver_id=${driverId}&count=${count}`);
+    const data = await res.json();
+    const urls = data.urls;
+
+    const container = document.getElementById("photoContainer");
+    container.innerHTML = "";
+
+    urls.forEach(({ url }) => {
+      const img = document.createElement("img");
+      img.src = url;
+      container.appendChild(img);
+    });
+
+    document.getElementById("photoModal").style.display = "flex";
+  } catch (err) {
+    console.error("Failed to load photos:", err);
+    alert("Could not load photos. Try again later.");
+  }
+}
+
+function closePhotoModal() {
+  document.getElementById("photoModal").style.display = "none";
+}
+
