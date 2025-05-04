@@ -167,18 +167,16 @@ async function loadCompletedJobs() {
   container.innerHTML = "<p>Loading completed jobs...</p>";
 
   try {
-    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/getAssignedJobs");
-    const jobs = await res.json();
+    const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/completedJobs");
+    const data = await res.json();
+    const jobs = data.jobs;
 
-    // Filter jobs marked as completed
-    const completedJobs = jobs.filter(job => job.status === "completed");
-
-    if (!completedJobs.length) {
+    if (!jobs.length) {
       container.innerHTML = "<p>No completed jobs found.</p>";
       return;
     }
 
-    container.innerHTML = completedJobs.map((job, index) => `
+    container.innerHTML = jobs.map((job, index) => `
       <div class="job-card">
         <div class="job-header">
           <div class="job-number">${index + 1}</div>
