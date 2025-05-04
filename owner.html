@@ -5,12 +5,13 @@
   <title>Owner Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-<div id="photoModal" class="modal" style="display:none;">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closePhotoModal()">&times;</span>
+<div id="photoModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:white; padding:20px; border-radius:8px; max-height:90vh; overflow:auto;">
+    <button onclick="closePhotoModal()" style="float:right; background-color:#ff4d4d; color:white; border:none; padding:6px 12px; border-radius:5px;">Close</button>
     <div id="photoContainer"></div>
   </div>
 </div>
+
 <body>
 
 <div class="dashboard-container">
