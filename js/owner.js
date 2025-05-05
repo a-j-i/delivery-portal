@@ -194,8 +194,14 @@ async function loadCompletedJobs() {
   }
 }
 
+// Fix for the viewJobPhotos button in showCompletedJobDetail function
 function showCompletedJobDetail(job) {
   const container = document.getElementById("completedJobContainer");
+  
+  // Create a data attribute to store photo keys safely
+  const photoKeysAttr = job.photo_keys ? 
+    `data-photo-keys='${JSON.stringify(job.photo_keys).replace(/'/g, "&apos;")}'` : '';
+  
   container.innerHTML = `
     <div class="job-detail-box">
       <div class="top-bar">
@@ -212,11 +218,18 @@ function showCompletedJobDetail(job) {
       <p><strong>Driver's Comment:</strong> ${job.drivers_comment || '(none)'}</p>
 
       ${Array.isArray(job.photo_keys) && job.photo_keys.length > 0 ? `
-        <button onclick="viewJobPhotos(${JSON.stringify(job.photo_keys)})">View Photos</button>
+        <button id="viewPhotosBtn" ${photoKeysAttr}>View Photos</button>
         <div id="photoContainer"></div>
       ` : '<p>No photos uploaded.</p>'}
     </div>
   `;
+  
+  // Add event listener separately after the DOM is updated
+  if (Array.isArray(job.photo_keys) && job.photo_keys.length > 0) {
+    document.getElementById("viewPhotosBtn").addEventListener("click", function() {
+      viewJobPhotos(job.photo_keys);
+    });
+  }
 }
 
 
