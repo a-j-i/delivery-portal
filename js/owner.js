@@ -194,13 +194,9 @@ async function loadCompletedJobs() {
   }
 }
 
-// Fix for the viewJobPhotos button in showCompletedJobDetail function
+// Updated showCompletedJobDetail function
 function showCompletedJobDetail(job) {
   const container = document.getElementById("completedJobContainer");
-  
-  // Create a data attribute to store photo keys safely
-  const photoKeysAttr = job.photo_keys ? 
-    `data-photo-keys='${JSON.stringify(job.photo_keys).replace(/'/g, "&apos;")}'` : '';
   
   container.innerHTML = `
     <div class="job-detail-box">
@@ -218,28 +214,44 @@ function showCompletedJobDetail(job) {
       <p><strong>Driver's Comment:</strong> ${job.drivers_comment || '(none)'}</p>
 
       ${Array.isArray(job.photo_keys) && job.photo_keys.length > 0 ? `
-        <button id="viewPhotosBtn" ${photoKeysAttr}>View Photos</button>
-        <div id="photoContainer"></div>
+        <div class="photo-section">
+          <button id="viewPhotosBtn">View Photos</button>
+          <div id="photoContainer" class="photo-container"></div>
+        </div>
       ` : '<p>No photos uploaded.</p>'}
     </div>
   `;
   
-  // Add event listener separately after the DOM is updated
+  // Add event listener after DOM is updated
   if (Array.isArray(job.photo_keys) && job.photo_keys.length > 0) {
-    document.getElementById("viewPhotosBtn").addEventListener("click", function() {
-      viewJobPhotos(job.photo_keys);
-    });
+    const photoBtn = document.getElementById("viewPhotosBtn");
+    if (photoBtn) {
+      photoBtn.addEventListener("click", function() {
+        viewJobPhotos(job.photo_keys);
+      });
+    }
   }
 }
 
-
+// Updated viewJobPhotos function
 async function viewJobPhotos(photoKeys) {
-  if (!Array.isArray(photoKeys) || photoKeys.some(k => typeof k !== 'string' || !k.includes("/"))) {
-    console.error("Invalid photo keys:", photoKeys);
-    alert("Invalid photo data. Cannot load photos.");
+  // Get container and show loading state
+  const container = document.getElementById("photoContainer");
+  if (!container) {
+    console.error("Photo container not found in DOM");
     return;
   }
-
+  
+  container.innerHTML = "<p>Loading photos...</p>";
+  
+  // Validate photo keys
+  if (!Array.isArray(photoKeys) || photoKeys.length === 0) {
+    container.innerHTML = "<p>No photos available.</p>";
+    return;
+  }
+  
+  console.log("Processing photo keys:", photoKeys); // Debug log
+  
   try {
     const res = await fetch("https://iil8njbabl.execute-api.ap-southeast-2.amazonaws.com/prod/jobs/photoUrlGenerator", {
       method: "POST",
@@ -247,26 +259,66 @@ async function viewJobPhotos(photoKeys) {
       body: JSON.stringify({ photo_keys: photoKeys })
     });
 
+    if (!res.ok) {
+      throw new Error(`Server returned ${res.status}`);
+    }
+
     const data = await res.json();
-    const urls = data.photo_urls || [];
+    console.log("Photo URL response:", data); // Debug log
+    
+    // Check if we have photo URLs
+    if (!data.photo_urls || !Array.isArray(data.photo_urls) || data.photo_urls.length === 0) {
+      container.innerHTML = "<p>No photos available from server.</p>";
+      return;
+    }
 
-    const container = document.getElementById("photoContainer");
+    // Clear container before adding images
     container.innerHTML = "";
-
-    urls.forEach(url => {
+    
+    // Create a photo gallery
+    const gallery = document.createElement("div");
+    gallery.className = "photo-gallery";
+    gallery.style.display = "flex";
+    gallery.style.flexWrap = "wrap";
+    gallery.style.justifyContent = "center";
+    gallery.style.gap = "10px";
+    
+    // Add each photo to the gallery
+    data.photo_urls.forEach((url, index) => {
+      const imgContainer = document.createElement("div");
+      imgContainer.className = "photo-item";
+      imgContainer.style.margin = "10px";
+      
       const img = document.createElement("img");
       img.src = url;
+      img.alt = `Job photo ${index + 1}`;
       img.style.maxWidth = "300px";
-      img.style.margin = "10px";
+      img.style.maxHeight = "300px";
       img.style.borderRadius = "8px";
-      container.appendChild(img);
+      img.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+      img.style.cursor = "pointer";
+      
+      // Add loading fallback
+      img.onerror = () => {
+        imgContainer.innerHTML = `<p>Failed to load image ${index + 1}</p>`;
+      };
+      
+      // Optionally add click to enlarge
+      img.addEventListener("click", function() {
+        window.open(url, "_blank");
+      });
+      
+      imgContainer.appendChild(img);
+      gallery.appendChild(imgContainer);
     });
+    
+    container.appendChild(gallery);
+    
   } catch (err) {
     console.error("Failed to load photos:", err);
-    alert("Could not load photos. Try again later.");
+    container.innerHTML = "<p>Error loading photos: " + err.message + "</p>";
   }
 }
-
 
 
 function closePhotoModal() {
