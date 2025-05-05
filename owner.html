@@ -1,15 +1,19 @@
+
 <!DOCTYPE html>
 <html>
 <head>
   <title>Owner Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
-
-
 <body>
+<div id="photoModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:white; padding:20px; border-radius:8px; max-height:90vh; overflow:auto;">
+    <button onclick="closePhotoModal()" style="float:right; background-color:#ff4d4d; color:white; border:none; padding:6px 12px; border-radius:5px;">Close</button>
+    <div id="photoContainer"></div>
+  </div>
+</div>
 
 <div class="dashboard-container">
-  <!-- Sidebar -->
   <div class="sidebar">
     <h3>Owner Panel</h3>
     <button onclick="showSection('upload')"> Upload Excel</button>
@@ -19,9 +23,7 @@
     <button onclick="showSection('failed')"> Failed Jobs</button>
   </div>
 
-  <!-- Main content area -->
   <div class="main-content">
-    <!-- Upload Excel -->
     <div id="upload" class="section" style="display: block;">
       <h2>Upload Job Excel</h2>
       <div class="job-card">
@@ -31,7 +33,6 @@
       </div>
     </div>
 
-    <!-- Unassigned Jobs -->
     <div id="unassigned" class="section">
       <h2>Unassigned Jobs</h2>
       <div class="job-card">
@@ -40,36 +41,26 @@
       <div id="jobContainer"></div>
     </div>
 
-    <!-- Assigned Jobs -->
     <div id="assigned" class="section">
       <h2>Assigned Jobs</h2>
       <div class="job-card">
-      <button onclick="loadAssignedJobs()"> Refresh</button>
+        <button onclick="loadAssignedJobs()"> Refresh</button>
       </div>
       <div id="assignedJobContainer"></div>
     </div>
 
-    <!-- Completed Jobs -->
-    <!-- Completed Jobs -->
     <div id="completed" class="section">
       <h2>Completed Jobs</h2>
       <div id="completedJobContainer"></div>
     </div>
 
-
-    <!-- Failed Jobs -->
     <div id="failed" class="section">
       <h2>Failed Jobs</h2>
       <p>Loading Failed Jobs</p>
     </div>
   </div>
 </div>
-<div id="photoModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000;">
-  <div style="background:white; padding:20px; border-radius:8px; max-height:90vh; overflow:auto;">
-    <button onclick="closePhotoModal()" style="float:right; background-color:#ff4d4d; color:white; border:none; padding:6px 12px; border-radius:5px;">Close</button>
-    <div id="photoContainer"></div>
-  </div>
-</div>
+
 <script src="js/owner.js"></script>
 <script>
   function showSection(id) {
