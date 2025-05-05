@@ -221,8 +221,9 @@ function showCompletedJobDetail(job) {
 
 
 async function viewJobPhotos(photoKeys) {
-  if (!photoKeys || !photoKeys.length) {
-    alert("No photos available for this job.");
+  if (!Array.isArray(photoKeys) || photoKeys.some(k => typeof k !== 'string' || !k.includes("/"))) {
+    console.error("Invalid photo keys:", photoKeys);
+    alert("Invalid photo data. Cannot load photos.");
     return;
   }
 
